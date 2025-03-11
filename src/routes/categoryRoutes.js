@@ -14,8 +14,8 @@ const router = express.Router();
 
 router.get("/", authenticateToken, getCategoriesController);
 router.get("/:id", authenticateToken, getUniqueCategoryController);
-router.post("/", authenticateToken, authorizeRole, validationMiddleware(createCategorySchema), createCategoryController);
-router.put("/:id", authenticateToken, authorizeRole, validationMiddleware(updateCategorySchema), updateCategoryController);
-router.delete("/:id", authenticateToken, authorizeRole, deleteCategoryController);
+router.post("/", authenticateToken, authorizeRole(), validationMiddleware(createCategorySchema), createCategoryController);
+router.put("/:id", authenticateToken, authorizeRole(), validationMiddleware(updateCategorySchema), updateCategoryController);
+router.delete("/:id", authenticateToken, authorizeRole(), deleteCategoryController);
 
 export default router;

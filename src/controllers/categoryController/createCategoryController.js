@@ -1,4 +1,3 @@
-import { findUser } from "../../lib/findUser.js";
 import { createCategory } from "../../services/category/createCategory.js";
 
 export const createCategoryController = async (req, res) => {

@@ -64,12 +64,12 @@ export const slugSchema = (isRequired = true) => {
   let schema = Joi.string()
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/) // slugs will be lowercase and can contain hyphens
     .min(3)
-    .max(50)
+    .max(200)
     .messages({
       "string.base": "Slug must be a string",
       "string.pattern.base": "Slug must contain only lowercase letters, numbers, and hyphens",
       "string.min": "Slug must be at least 3 characters long",
-      "string.max": "Slug must be less than 50 characters",
+      "string.max": "Slug must be less than 200 characters",
     });
 
   if (isRequired) {
@@ -80,7 +80,7 @@ export const slugSchema = (isRequired = true) => {
 };
 
 export const categoryNameSchema = () =>
-  Joi.string().min(3).max(100).messages({
+  Joi.string().min(3).max(200).messages({
     "string.base": "Category name must be a string",
     "string.min": "Category name must be at least 3 characters long",
     "string.max": "Category name must be less than 50 characters",
@@ -96,4 +96,55 @@ export const categoryDescriptionSchema = () =>
 export const bannerImageSchema = () =>
   Joi.string().uri().allow("").optional().messages({
     "string.uri": "Banner image must be a valid URL",
+  });
+
+export const courseNameSchema = () =>
+  Joi.string().min(3).max(200).messages({
+    "string.base": "Category name must be a string",
+    "string.min": "Category name must be at least 3 characters long",
+    "string.max": "Category name must be less than 50 characters",
+  });
+
+export const courseDescriptionSchema = () =>
+  Joi.string().optional().messages({
+    "string.base": "Description must be a string",
+  });
+
+export const categoryIdSchema = () =>
+  Joi.string().required().messages({
+    "string.base": "Category ID must be a string",
+    "any.required": "Category ID is required",
+  });
+
+export const startDateSchema = () =>
+  Joi.date().iso().required().messages({
+    "date.base": "Start date must be a valid date",
+    "date.format": "Start date must be in ISO format (YYYY-MM-DD)",
+    "any.required": "Start date is required",
+  });
+
+export const endDateSchema = () =>
+  Joi.date()
+    .iso()
+    .greater(Joi.ref("startDate")) // Bitiş tarihi, başlangıç tarihinden büyük olmalı
+    .required()
+    .messages({
+      "date.base": "End date must be a valid date",
+      "date.format": "End date must be in ISO format (YYYY-MM-DD)",
+      "date.greater": "End date must be after the start date",
+      "any.required": "End date is required",
+    });
+
+export const levelSchema = () =>
+  Joi.string()
+    .valid("beginner", "intermediate", "advanced") // Sadece belirli seviyeler kabul edilir
+    .required()
+    .messages({
+      "any.only": "Level must be one of 'beginner', 'intermediate', or 'advanced'",
+      "any.required": "Level is required",
+    });
+
+export const isActive = () =>
+  Joi.boolean().default(true).messages({
+    "boolean.base": "isActive must be a boolean",
   });
