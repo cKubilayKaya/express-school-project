@@ -7,7 +7,6 @@ export const assignStudentsController = async (req, res) => {
 
   try {
     const updatedCourse = await assignStudents(courseId, studentsId, user);
-
     return res.status(200).json({
       success: true,
       data: updatedCourse,
