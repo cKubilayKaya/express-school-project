@@ -16,6 +16,6 @@ app.use(helmet());
 app.use(morgan("dev"));
 
 //routes
-app.use("/api/users", userRoutes);
+app.use("/api/auth", userRoutes);
 
 export default app;

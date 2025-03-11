@@ -1,4 +1,4 @@
-import { getUniqueUser } from "../../services/userService.js";
+import { getUniqueUser } from "../../services/auth/getUniqueUser.js";
 
 export const getUniqueUserController = async (req, res) => {
   const { id } = req.params;

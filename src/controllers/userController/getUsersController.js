@@ -1,4 +1,4 @@
-import { getUsers } from "../../services/userService.js";
+import { getUsers } from "../../services/auth/getUsers.js";
 
 export const getUsersController = async (req, res) => {
   try {

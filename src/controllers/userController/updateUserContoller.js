@@ -1,4 +1,4 @@
-import { updateUser } from "../../services/userService.js";
+import { updateUser } from "../../services/auth/updateUser.js";
 
 export const updateUserContoller = async (req, res) => {
   const { id } = req.params;
