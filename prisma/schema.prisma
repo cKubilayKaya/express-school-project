@@ -8,10 +8,64 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  fullName  String?
-  userName  String   @unique
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  email         String   @unique
+  createdAt     DateTime @default(now())
+  fullName      String
+  userName      String   @unique
+  password      String
+  address       String?
+  bio           String?
+  phoneNumber   String?
+  profileImage  String?
+  role          Role     @default(student)
+  updatedAt     DateTime @default(now())
+  courses       Course[] @relation("CourseStudents")
+  taughtCourses Course[] @relation("CourseTeachers")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  categoryId  String
+  startDate   DateTime
+  endDate     DateTime
+  level       String
+  isActive    Boolean  @default(true)
+  bannerImage String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  category    Category @relation(fields: [categoryId], references: [id])
+  students    User[]   @relation("CourseStudents")
+  teachers    User[]   @relation("CourseTeachers")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  bannerImage String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  slug        String   @unique
+  courses     Course[]
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+enum Role {
+  teacher
+  student
+  super_admin
+}
+
+enum Difficulty {
+  easy
+  medium
+  hard
 }

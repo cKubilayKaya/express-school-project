@@ -1,7 +1,7 @@
 import prisma from "../../lib/prisma.js";
 
-export const deleteUser = async (id) => {
-  return await prisma.user.delete({
+export const deleteCategory = async (id) => {
+  return await prisma.category.delete({
     where: {
       id: id,
     },
