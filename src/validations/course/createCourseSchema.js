@@ -4,8 +4,9 @@ import {
   categoryIdSchema,
   courseDescriptionSchema,
   courseNameSchema,
+  createdByIdSchema,
   endDateSchema,
-  isActive,
+  isActiveSchema,
   levelSchema,
   slugSchema,
   startDateSchema,
@@ -20,5 +21,6 @@ export const createCourseSchema = Joi.object({
   startDate: startDateSchema(),
   endDate: endDateSchema(),
   level: levelSchema(),
-  isActive: isActive(),
+  isActive: isActiveSchema(),
+  createdById: createdByIdSchema(),
 });

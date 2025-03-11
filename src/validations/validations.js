@@ -54,7 +54,7 @@ export const profileImageSchema = () =>
   });
 
 export const roleSchema = () =>
-  Joi.string().valid("student", "teacher").required().messages({
+  Joi.string().valid("student", "teacher", "super_admin").required().messages({
     "string.base": "Role must be a string",
     "any.required": "Role is required",
     "any.only": "Role must be either 'student' or 'teacher'",
@@ -144,7 +144,36 @@ export const levelSchema = () =>
       "any.required": "Level is required",
     });
 
-export const isActive = () =>
+export const isActiveSchema = () =>
   Joi.boolean().default(true).messages({
     "boolean.base": "isActive must be a boolean",
   });
+
+export const createdByIdSchema = () =>
+  Joi.string().uuid().optional().messages({
+    "string.guid": "createdBy must be a valid UUID.",
+  });
+
+export const assignIdTeachersSchema = (message) =>
+  Joi.array()
+    .items(Joi.string().uuid().message("Each teacher ID must be a valid GUID.").required()) // UUID formatında kontrol
+    .min(1)
+    .required()
+    .messages({
+      "array.base": "Teacher IDs must be provided as an array.",
+      "array.items": "Each teacher ID must be a valid GUID.",
+      "array.min": "At least one teacher ID must be provided.",
+      "any.required": `${message} IDs are required.`,
+    });
+
+export const assignIdStudentsSchema = () =>
+  Joi.array()
+    .items(Joi.string().uuid().message("Each student ID must be a valid GUID.").required()) // UUID formatında kontrol
+    .min(1)
+    .required()
+    .messages({
+      "array.base": "Student IDs must be provided as an array.",
+      "array.items": "Each student ID must be a valid GUID.",
+      "array.min": "At least one student ID must be provided.",
+      "any.required": "Student IDs are required.",
+    });

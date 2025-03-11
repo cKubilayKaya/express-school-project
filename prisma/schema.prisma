@@ -8,24 +8,25 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  createdAt     DateTime @default(now())
-  fullName      String
-  userName      String   @unique
-  password      String
-  address       String?
-  bio           String?
-  phoneNumber   String?
-  profileImage  String?
-  role          Role     @default(student)
-  updatedAt     DateTime @default(now())
-  courses       Course[] @relation("CourseStudents")
-  taughtCourses Course[] @relation("CourseTeachers")
+  id             String   @id @default(uuid())
+  email          String   @unique
+  createdAt      DateTime @default(now())
+  fullName       String
+  userName       String   @unique
+  password       String
+  address        String?
+  bio            String?
+  phoneNumber    String?
+  profileImage   String?
+  role           Role     @default(student)
+  updatedAt      DateTime @default(now())
+  courses        Course[] @relation("CourseStudents")
+  taughtCourses  Course[] @relation("CourseTeachers")
+  coursesCreated Course[] @relation("CreatedCourses") // Yeni ilişki alanı
 }
 
 model Course {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String
   slug        String   @unique
   description String
@@ -33,6 +34,8 @@ model Course {
   startDate   DateTime
   endDate     DateTime
   level       String
+  createdById String
+  createdBy   User     @relation("CreatedCourses", fields: [createdById], references: [id])
   isActive    Boolean  @default(true)
   bannerImage String?
   createdAt   DateTime @default(now())
@@ -43,7 +46,7 @@ model Course {
 }
 
 model Category {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String
   description String?
   bannerImage String?

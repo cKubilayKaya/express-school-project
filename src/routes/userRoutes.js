@@ -1,6 +1,4 @@
 import express from "express";
-
-import { getUsersController } from "../controllers/userController/getUsersController.js";
 import { getUniqueUserController } from "../controllers/userController/getUniqueUserController.js";
 import { registerController } from "../controllers/userController/registerController.js";
 import { updateUserContoller } from "../controllers/userController/updateUserContoller.js";
@@ -12,7 +10,6 @@ import { authenticateToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", authenticateToken, getUsersController);
 router.get("/:id", authenticateToken, getUniqueUserController);
 router.post("/register", validationMiddleware(registerSchema), registerController);
 router.post("/login", validationMiddleware(loginSchema), loginController);

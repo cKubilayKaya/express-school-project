@@ -1,10 +1,11 @@
 import { deleteCourse } from "../../services/course/deleteCourse.js";
 
 export const deleteCourseController = async (req, res) => {
-  const { id } = req.params;
+  const { courseId } = req.params;
+  const user = req.user;
 
   try {
-    await deleteCourse(id);
+    await deleteCourse(user, courseId);
     res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
