@@ -12,7 +12,7 @@ export const deleteStudentsFromCourse = async (user, courseId, studentsId) => {
     });
   }
 
-  if (user.role === "teacher") {
+  if (user.role === "student") {
     return await prisma.course.update({
       where: { id: courseId },
       data: {
