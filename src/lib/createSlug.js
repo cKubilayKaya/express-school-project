@@ -16,7 +16,10 @@ export const createSlug = (name) => {
     ?.replace(/-+/g, "-"); // Birden fazla tıraşlı tireyi bir tane yap
 
   // Sayıları da slug'a ekleyelim (örneğin "2" gibi)
-  const finalSlug = cleanedName?.replace(/(\d+)/g, "-$1").replace(/^-+|-+$/g, ""); // Rakamları başa veya sona eklememek için düzelt
+  const finalSlug = cleanedName
+    ?.replace(/(\d+)/g, "-$1") // Sayıları başa veya sona eklememek için düzelt
+    ?.replace(/^-+|-+$/g, "") // Başındaki ve sonundaki tireyi kaldır
+    ?.replace(/-+/g, "-"); // Birden fazla tireyi bir tane yap
 
   return finalSlug;
 };

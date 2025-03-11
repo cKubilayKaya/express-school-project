@@ -5,8 +5,6 @@ export const deleteTeachersFromCourseController = async (req, res) => {
   const { teachersId } = req.body;
   const user = req.user;
 
-  console.log("teacherIds", teachersId);
-
   try {
     await deleteTeachersFromCourse(user, courseId, teachersId);
     res.status(200).json({ success: true, message: "Teachers removed from the course successfully." });

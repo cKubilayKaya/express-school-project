@@ -8,7 +8,6 @@ export const assignStudents = async (courseId, studentsId, user) => {
     };
   }
 
-  // Eğer kullanıcı student ise, sadece kendisini ekleyebilmesi gerekir
   if (user.role === "student") {
     const isTryingToAddOthers = studentsId.some((id) => id !== user.userId);
     if (isTryingToAddOthers) {
@@ -19,7 +18,6 @@ export const assignStudents = async (courseId, studentsId, user) => {
     }
   }
 
-  // Kursu bul
   const course = await prisma.course.findUnique({
     where: { id: courseId },
     include: { students: true },
@@ -32,7 +30,6 @@ export const assignStudents = async (courseId, studentsId, user) => {
     };
   }
 
-  // Öğrencilerin mevcut olup olmadığını kontrol et
   const students = await prisma.user.findMany({
     where: {
       id: { in: studentsId },
@@ -47,7 +44,6 @@ export const assignStudents = async (courseId, studentsId, user) => {
     };
   }
 
-  // Öğrencilerin daha önce kursa atanıp atanmadığını kontrol et
   for (let student of students) {
     const alreadyAssigned = course.students.some((courseStudent) => courseStudent.id === student.id);
     if (alreadyAssigned) {
@@ -58,13 +54,15 @@ export const assignStudents = async (courseId, studentsId, user) => {
     }
   }
 
-  // Kursa öğrencileri ekle
   const updatedCourse = await prisma.course.update({
     where: { id: courseId },
     data: {
       students: {
         connect: studentsId.map((id) => ({ id })),
       },
+    },
+    include: {
+      students: true,
     },
   });
 

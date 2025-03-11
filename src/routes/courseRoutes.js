@@ -15,17 +15,26 @@ import { assignTeachersSchema } from "../validations/course/assignTeachersSchema
 import { assignStudentsSchema } from "../validations/course/assignStudentsSchema.js";
 import { deleteTeachersFromCourseController } from "../controllers/courseController/deleteTeachersFromCourseController.js";
 import { deleteStudentsFromCourseController } from "../controllers/courseController/deleteStudentsFromCourseController.js";
+import { authorizeTeacherCourseOwnership } from "../middlewares/authorizeTeacherCourseOwnership.js";
 
 const router = express.Router();
 
 router.get("/", authenticateToken, getCoursesController);
 router.get("/:courseId", authenticateToken, getUniqueCourseController);
 router.post("/", authenticateToken, authorizeRole(["super_admin", "teacher"]), validationMiddleware(createCourseSchema), createCourseController);
-router.put("/:courseId", authenticateToken, authorizeRole(["super_admin", "teacher"]), validationMiddleware(updateCourseSchema), updateCourseController);
+router.put(
+  "/:courseId",
+  authenticateToken,
+  authorizeRole(["super_admin", "teacher"]),
+  validationMiddleware(updateCourseSchema),
+  authorizeTeacherCourseOwnership,
+  updateCourseController
+);
 router.put(
   "/:courseId/teachers",
   authenticateToken,
   authorizeRole(["super_admin", "teacher"]),
+  authorizeTeacherCourseOwnership,
   validationMiddleware(assignTeachersSchema),
   assignTeachersController
 );
@@ -36,8 +45,20 @@ router.put(
   validationMiddleware(assignStudentsSchema),
   assignStudentsController
 );
-router.delete("/:courseId", authenticateToken, authorizeRole(["super_admin", "teacher"]), deleteCourseController);
-router.delete("/:courseId/teachers", authenticateToken, authorizeRole(["super_admin", "teacher"]), deleteTeachersFromCourseController);
-router.delete("/:courseId/students", authenticateToken, authorizeRole(["super_admin", "teacher"]), deleteStudentsFromCourseController);
+router.delete("/:courseId", authenticateToken, authorizeRole(["super_admin", "teacher"]), authorizeTeacherCourseOwnership, deleteCourseController);
+router.delete(
+  "/:courseId/teachers",
+  authenticateToken,
+  authorizeRole(["super_admin", "teacher"]),
+  authorizeTeacherCourseOwnership,
+  deleteTeachersFromCourseController
+);
+router.delete(
+  "/:courseId/students",
+  authenticateToken,
+  authorizeRole(["super_admin", "teacher"]),
+  authorizeTeacherCourseOwnership,
+  deleteStudentsFromCourseController
+);
 
 export default router;

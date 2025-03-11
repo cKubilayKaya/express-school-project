@@ -20,48 +20,39 @@ export const assignTeachers = async (courseId, teacherIds, user) => {
     };
   }
 
-  // Öğretmen rolü kontrolü
+  if (user.role === "super_admin") {
+    return await prisma.course.update({
+      where: { id: courseId },
+      data: {
+        teachers: {
+          connect: teacherIds.map((id) => ({ id })),
+        },
+      },
+      include: { teachers: true },
+    });
+  }
+
   if (user.role === "teacher") {
-    // Kurs oluşturucusu kontrolü
     if (course.createdById !== user.userId) {
       throw {
         status: 403,
         message: "Teachers can only assign teachers to courses they created.",
       };
     }
-  }
-  // Admin değilse ve öğretmen değilse (veya öğretmen olup kursu oluşturmamışsa) izin vermiyoruz
-  else if (user.role !== "super_admin") {
-    throw {
-      status: 403,
-      message: "You do not have permission to assign teachers to this course.",
-    };
-  }
 
-  // Öğretmenleri kontrol et
-  const teachers = await prisma.user.findMany({
-    where: {
-      id: { in: teacherIds },
-      role: "teacher",
-    },
-  });
-
-  if (teachers.length !== teacherIds.length) {
-    throw {
-      status: 404,
-      message: "One or more teachers not found.",
-    };
-  }
-
-  // Kursa öğretmenleri ekle
-  const updatedCourse = await prisma.course.update({
-    where: { id: courseId },
-    data: {
-      teachers: {
-        connect: teacherIds.map((id) => ({ id })),
+    return await prisma.course.update({
+      where: { id: courseId },
+      data: {
+        teachers: {
+          connect: teacherIds.map((id) => ({ id })),
+        },
       },
-    },
-  });
+      include: { teachers: true },
+    });
+  }
 
-  return updatedCourse;
+  throw {
+    status: 403,
+    message: "You do not have permission to assign teachers to this course.",
+  };
 };

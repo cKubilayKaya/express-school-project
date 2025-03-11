@@ -12,14 +12,7 @@ export const updateCourse = async (courseId, data, user) => {
     };
   }
 
-  if (user.role === "teacher") {
-    if (course.createdById !== user.userId) {
-      throw {
-        status: 403,
-        message: "You are not allowed to update this course.",
-      };
-    }
-  } else if (user.role === "student") {
+  if (user.role === "student") {
     throw {
       status: 403,
       message: "Students cannot update courses.",
