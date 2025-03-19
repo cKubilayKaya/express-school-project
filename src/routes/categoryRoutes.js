@@ -12,8 +12,8 @@ import { authorizeRole } from "../middlewares/authorizeRole.js";
 
 const router = express.Router();
 
-router.get("/", authenticateToken, getCategoriesController);
-router.get("/:id", authenticateToken, getUniqueCategoryController);
+router.get("/", getCategoriesController);
+router.get("/:id", getUniqueCategoryController);
 router.post("/", authenticateToken, authorizeRole(["super_admin"]), validationMiddleware(createCategorySchema), createCategoryController);
 router.put("/:id", authenticateToken, authorizeRole(["super_admin"]), validationMiddleware(updateCategorySchema), updateCategoryController);
 router.delete("/:id", authenticateToken, authorizeRole(["super_admin"]), deleteCategoryController);

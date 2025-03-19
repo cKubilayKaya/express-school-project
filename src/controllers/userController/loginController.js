@@ -4,8 +4,8 @@ export const loginController = async (req, res) => {
   const { userName, password } = req.body;
 
   try {
-    const { token } = await login({ userName: userName, password: password });
-    res.status(201).json({ success: true, token: token });
+    const { user, token } = await login({ userName: userName, password: password });
+    res.status(201).json({ success: true, token: token, user: user });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

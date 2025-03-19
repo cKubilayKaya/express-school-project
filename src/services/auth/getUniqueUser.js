@@ -5,5 +5,9 @@ export const getUniqueUser = async (id) => {
     where: {
       id: id,
     },
+    include: {
+      coursesCreated: true,
+      taughtCourses: true,
+    },
   });
 };
