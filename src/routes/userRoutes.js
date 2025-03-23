@@ -7,12 +7,13 @@ import { registerSchema } from "../validations/auth/registerSchema.js";
 import { loginSchema } from "../validations/auth/loginSchema.js";
 import { loginController } from "../controllers/userController/loginController.js";
 import { authenticateToken } from "../middlewares/authMiddleware.js";
+import upload from "../middlewares/upload.js";
 
 const router = express.Router();
 
-router.get("/:id", authenticateToken, getUniqueUserController);
+router.get("/:idOrUserName", authenticateToken, getUniqueUserController);
 router.post("/register", validationMiddleware(registerSchema), registerController);
 router.post("/login", validationMiddleware(loginSchema), loginController);
-router.put("/:id", authenticateToken, updateUserContoller);
+router.put("/:id", authenticateToken, upload.single("profileImage"), updateUserContoller);
 
 export default router;

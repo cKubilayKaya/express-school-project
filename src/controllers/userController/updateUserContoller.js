@@ -6,6 +6,10 @@ export const updateUserContoller = async (req, res) => {
   const user = req.user;
 
   try {
+    if (req?.file) {
+      data.profileImage = `/uploads/${req.file.filename}`;
+    }
+
     await updateUser(id, data, user);
     res.status(200).json({ success: true });
   } catch (error) {

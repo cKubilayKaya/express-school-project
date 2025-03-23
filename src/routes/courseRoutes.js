@@ -16,12 +16,20 @@ import { assignStudentsSchema } from "../validations/course/assignStudentsSchema
 import { deleteTeachersFromCourseController } from "../controllers/courseController/deleteTeachersFromCourseController.js";
 import { deleteStudentsFromCourseController } from "../controllers/courseController/deleteStudentsFromCourseController.js";
 import { authorizeTeacherCourseOwnership } from "../middlewares/authorizeTeacherCourseOwnership.js";
+import upload from "../middlewares/upload.js";
 
 const router = express.Router();
 
 router.get("/", authenticateToken, getCoursesController);
-router.get("/:courseId", authenticateToken, getUniqueCourseController);
-router.post("/", authenticateToken, authorizeRole(["super_admin", "teacher"]), validationMiddleware(createCourseSchema), createCourseController);
+router.get("/:courseIdOrSlug", authenticateToken, getUniqueCourseController);
+router.post(
+  "/",
+  authenticateToken,
+  authorizeRole(["super_admin", "teacher"]),
+  validationMiddleware(createCourseSchema),
+  upload.single("bannerImage"),
+  createCourseController
+);
 router.put(
   "/:courseId",
   authenticateToken,

@@ -5,6 +5,10 @@ export const createCourseController = async (req, res) => {
   const userId = req?.user?.userId;
 
   try {
+    if (req?.file) {
+      data.bannerImage = `/uploads/${req.file.filename}`;
+    }
+
     const course = await createCourse(data, userId);
     res.status(200).json({ success: true, data: course });
   } catch (error) {
